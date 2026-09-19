@@ -1,0 +1,13 @@
+# Dependency directory
+node_modules/
+
+# Local environment variables
+.env
+.env.local
+
+# Production build/logs
+logs/
+*.log
+
+# File uploads directory
+uploads/

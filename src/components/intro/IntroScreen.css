@@ -1,0 +1,169 @@
+/* ============================================================
+   MEDACCESS — CINEMATIC INTRO SCREEN  (Asset-Based Rebuild)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+
+/* ── Variables ─────────────────────────────────────────── */
+:root {
+  --g: #00e676;
+  --c: #00b0ff;
+  --g-glow: rgba(0,230,118,0.75);
+  --c-glow: rgba(0,176,255,0.75);
+}
+
+/* ── Wrapper ────────────────────────────────────────────── */
+.intro-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* vertically: give more room top for logo, push ripple to bottom */
+  justify-content: center;
+}
+
+/* ── Background image — FULL, CLEARLY VISIBLE ──────────── */
+.intro-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url('../../assets/intro.bg.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* slight brightness boost so the teal nebula really pops */
+  filter: brightness(1.18) saturate(1.3);
+}
+
+/* dark vignette only on extreme edges — keeps centre clear */
+.intro-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 85% 80% at 50% 45%, transparent 55%, rgba(1,6,12,0.55) 100%);
+  pointer-events: none;
+}
+
+/* ── Floating Particles canvas ──────────────────────────── */
+.intro-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── ECG canvas (full width, centred vertically on logo) ── */
+.intro-ecg {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 3;
+  pointer-events: none;
+  /* Vertical centre adjusted by JS via top style */
+}
+
+/* ── Centre stage ───────────────────────────────────────── */
+.intro-stage {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* sits in the upper-centre of the screen */
+  margin-top: -60px;
+}
+
+/* ── Logo ───────────────────────────────────────────────── */
+.intro-logo {
+  width: clamp(220px, 28vw, 380px);
+  height: auto;
+  filter:
+    drop-shadow(0 0 24px var(--g-glow))
+    drop-shadow(0 0 55px rgba(0,230,118,0.4))
+    drop-shadow(0 0 12px var(--c-glow));
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+/* ── Text (MedAccess image) ─────────────────────────────── */
+.intro-text-img {
+  width: clamp(280px, 52vw, 680px);
+  height: auto;
+  margin-top: 10px;
+  filter:
+    drop-shadow(0 0 18px var(--g-glow))
+    drop-shadow(0 0 40px rgba(0,176,255,0.4));
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+/* ── Tagline image ──────────────────────────────────────── */
+.intro-tagline-img {
+  width: clamp(240px, 42vw, 540px);
+  height: auto;
+  margin-top: 12px;
+  filter:
+    drop-shadow(0 0 10px var(--g-glow))
+    drop-shadow(0 0 22px rgba(0,176,255,0.35));
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+/* ── Water Ripple section (canvas-only, no image) ────────── */
+.intro-ripple-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 5;
+  pointer-events: none;
+  /* gentle top-edge blend into bg */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 18%);
+}
+
+/* Pure canvas — fills the ripple zone completely */
+.intro-ripple-canvas {
+  display: block;
+  width: 100%;
+  height: 340px;          /* tall enough to be very prominent */
+  /* no blend mode — render directly so neon pops on dark bg */
+  mix-blend-mode: normal;
+}
+
+/* ── Pulse glow keyframes (used on logo) ────────────────── */
+@keyframes logoPulse {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 24px var(--g-glow))
+      drop-shadow(0 0 55px rgba(0,230,118,0.35))
+      drop-shadow(0 0 12px var(--c-glow));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 38px var(--g-glow))
+      drop-shadow(0 0 80px rgba(0,230,118,0.55))
+      drop-shadow(0 0 20px var(--c-glow));
+  }
+}
+
+/* ── Fade-out overlay ───────────────────────────────────── */
+.intro-fadeout {
+  animation: introOut 1.4s ease-in-out forwards;
+}
+
+@keyframes introOut {
+  to { opacity: 0; }
+}
+
+/* ── Responsive tweaks ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .intro-stage { margin-top: -30px; }
+  .intro-logo  { width: clamp(160px, 38vw, 240px); }
+  .intro-text-img { width: clamp(200px, 70vw, 360px); }
+  .intro-tagline-img { width: clamp(180px, 65vw, 320px); }
+}
